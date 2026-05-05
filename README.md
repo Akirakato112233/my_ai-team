@@ -2,6 +2,10 @@
 
 Simple product CRUD app built with Django for the API and React + Tailwind CSS for the UI.
 
+## Current work
+
+Tracked in Jira as `SCRUM-1`: add a basic login page flow to the frontend.
+
 ## Run the backend
 
 ```bash
