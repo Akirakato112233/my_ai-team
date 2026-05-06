@@ -78,3 +78,26 @@ class TestProductApi(TestCase):
         self.assertEqual(response.json()["status"], "error")
         self.assertIn("name", response.json()["errors"])
         self.assertIn("price", response.json()["errors"])
+
+    def test_login_accepts_username_and_password(self):
+        response = self.client.post(
+            reverse("login"),
+            data=json.dumps({"username": "akira", "password": "secret"}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "success")
+        self.assertEqual(response.json()["data"]["user"]["username"], "akira")
+
+    def test_login_requires_username_and_password(self):
+        response = self.client.post(
+            reverse("login"),
+            data=json.dumps({"username": "", "password": ""}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["status"], "error")
+        self.assertIn("username", response.json()["errors"])
+        self.assertIn("password", response.json()["errors"])
