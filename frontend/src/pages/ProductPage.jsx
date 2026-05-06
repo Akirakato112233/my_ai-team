@@ -31,6 +31,17 @@ function validateForm(form) {
   return errors
 }
 
+function filterProducts(products, searchTerm) {
+  const normalizedSearch = searchTerm.trim().toLowerCase()
+  if (!normalizedSearch) {
+    return products
+  }
+
+  return products.filter((product) =>
+    product.name.toLowerCase().includes(normalizedSearch),
+  )
+}
+
 function ProductPage() {
   const [products, setProducts] = useState([])
   const [form, setForm] = useState(emptyForm)
@@ -40,8 +51,10 @@ function ProductPage() {
   const [deletingId, setDeletingId] = useState(null)
   const [serverError, setServerError] = useState('')
   const [formErrors, setFormErrors] = useState({})
+  const [searchTerm, setSearchTerm] = useState('')
 
   const isEditing = editingId !== null
+  const filteredProducts = filterProducts(products, searchTerm)
 
   useEffect(() => {
     let active = true
@@ -182,9 +195,12 @@ function ProductPage() {
           />
 
           <ProductList
-            products={products}
+            products={filteredProducts}
+            totalProducts={products.length}
+            searchTerm={searchTerm}
             loading={loading}
             deletingId={deletingId}
+            onSearchChange={setSearchTerm}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
